@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+
+from fakersslib import fetch, db
+import os
+import sys
+import time
+
+q = fetch.scan_list()
+fetch.dispatch(q)
+os.system('date')

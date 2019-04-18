@@ -1,0 +1,3 @@
+beautifulsoup4>=4.3.0
+requests>=0.14
+twitter-scraper>=0.3.0

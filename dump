@@ -1,0 +1,27 @@
+#!/usr/bin/env python3
+
+'''
+
+Dump FakeRSS sqlite3 databases to a terminal.
+Usage: ./dump twitter/jsixpack
+
+'''
+
+
+import sys
+from fakersslib import db
+from pprint import pprint
+
+
+def print_meat(meat=None):
+    for l in meat:
+        print('{0} | {1}'.format(l[0], l[1]))
+    print('')
+    return
+
+
+if len(sys.argv) > 1:
+    # TODO: argparse
+    req_file = sys.argv[1]
+    meat = db.read('db/{0}.db'.format(req_file))
+    print_meat(meat)
