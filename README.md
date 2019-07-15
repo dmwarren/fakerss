@@ -1,12 +1,14 @@
 # FakeRSS
-A simple system for aggregating new stuff from websites that don't provide RSS feeds, complete with command-line reader and web interface. Logs new items to a SQLite3 database. Includes plugins for Twitter and Instagram.
+A simple system for aggregating new stuff from websites that don't provide RSS feeds, complete with command-line reader and web interface. Logs new items to a SQLite3 database.
+
+Includes plugins for Twitter and other forms of cancer.
 
 
 # ... but why?
 
-Social media is cancer but unfortunately there is also some nice retrocomputing, Python, and other geek stuff flying through it. I want the good stuff without a mobile app (or worse, a mobile app's crappy website--with popups!) controlling how I consume it. 
+Unmoderated social media has exposed the ghastly anti-progressive attitude of the world and you should probably ignore it. Unfortunately there is also some nice retrocomputing, Python, and other geek stuff flying through it. I want the good stuff without a mobile app (or worse, a mobile app's crappy website--with popups!) controlling how I consume it.
 
-Plus, I don't want to sign up for an account on *any* of these services. I just want new links once or twice a day, on the command line, with no distractions.
+Plus, I don't want to sign up for an account on *any* of these services. I just want new links once or twice a day, on the command line, without distractions.
 
 Rage against the social media machine. Bring back the decentralized web!
 
@@ -24,6 +26,7 @@ Rage against the social media machine. Bring back the decentralized web!
 Please see LICENSE.md.
 
 # Version History
+  - 15-Jul-2019 - v0.21 - New feature: regex filter for Twitter
   - 17-Apr-2019 - v0.20 - First public release
   - 25-Dec-2016 - v0.01 - First working version
 
@@ -37,7 +40,7 @@ $ ./fakerss
 Loading plugin:twitter
 https://twitter.com/foone
 foone - 2019-04-17 17:55:30
-    but some smartsases figured out it was cheaper to buy an old one
+    but some smartasses figured out it was cheaper to buy an old one
     from the 80s (because Model M keyboards do not die) and rip out
     the controller board and stuff in a replacement. Bam, you've got a
     Model M on your macbook and it's only like 50$!

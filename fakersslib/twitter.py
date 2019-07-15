@@ -1,9 +1,10 @@
 from bs4 import BeautifulSoup, NavigableString
 from . import db, fetch
 from datetime import datetime
-from twitter_scraper import get_tweets
+import fileinput
 import re
 from textwrap import TextWrapper
+from twitter_scraper import get_tweets
 
 '''
 FakeRSS Twitter Plugin v0.1.
@@ -31,12 +32,12 @@ Con: Retweets are not attributed to the original author which can be
 confusing. Oh well, it's Twitter so it's 99% worthless misinformation
 anyway, right?
 
-Not like Twitter an appropriate forum for customer service or long-form
-discussions and formal political discourse! Right? Ha! Haha!
+Not like Twitter is an appropriate forum for customer service or long-form
+discussions and formal political discourse... right? Ha! Haha!
 hahahahahaha<uncontrollable sobbing>
 
-
 '''
+
 
 def extract_items(username=None):
     prof_items = []
@@ -48,6 +49,9 @@ def extract_items(username=None):
 
 
 def cleanup(meat=None):
+    # IN: Raw Twitter library output.
+    # OUT: Complete picture and video URLs without redundant links.
+
     # pic.twitter.com URLs are just shortened links/redirects.
     # These are redundant now that Kenneth Reitz hands you the
     # actual picture URL in a dict, so nuke 'em.
@@ -67,8 +71,43 @@ def cleanup(meat=None):
         '''
         for video in meat['entries']['videos']:
             out_str += "\n" + video['id']
-    # todo: hackernews filter.txt processing
     return out_str.strip()
+
+
+def regex_filter(new_items=None):
+    '''
+    IN: [('date_str', 'tweet_txt'), ...]
+    OUT: Same list, but without the tuples that trip filter.txt
+    '''
+    out_list = []
+
+    # inhale filter list
+    patterns = []
+    for line in fileinput.input('filter.conf'):
+        line = line.strip()
+        # multi-plugin filter file, so strip twitter: prefix from each pattern
+        line = re.sub('^twitter:', '', line)
+        # skip blank lines
+        if len(line) < 3:
+            continue
+        # skip comments
+        if re.match(r'^#', line):
+            continue
+        patterns.append(line)
+    combined_re = "(" + ")|(".join(patterns) + ")"
+    compiled_re = re.compile(combined_re)
+
+    if len(patterns) == 0:
+        # no filters found
+        return new_items
+
+    for tweet_tpl in new_items:
+        if compiled_re.match(tweet_tpl[1]):
+            pass
+        else:
+            out_list.append(tweet_tpl)
+
+    return out_list
 
 
 def humanize_timestamp(in_datetime=None):
@@ -134,7 +173,12 @@ def digest(url=None, soup=None):
         last_timestamp = db.get_last_timestamp(db_path)
         new_items = isolate_new(live_items, last_timestamp)
 
+    # filter.txt processing
+    # We do this /here/ as a lazy way to avoid dealing with
+    # returning None all the back up the chain.
+    new_items = regex_filter(new_items)
     num_new_items = len(new_items)
+
     if num_new_items > 0:
         list_new(username, new_items)
         db.store_new(new_items, db_path)
