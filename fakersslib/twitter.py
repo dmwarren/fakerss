@@ -95,7 +95,7 @@ def regex_filter(new_items=None):
             continue
         patterns.append(line)
     combined_re = "(" + ")|(".join(patterns) + ")"
-    compiled_re = re.compile(combined_re)
+    compiled_re = re.compile(combined_re, flags=re.MULTILINE)
 
     if len(patterns) == 0:
         # no filters found
